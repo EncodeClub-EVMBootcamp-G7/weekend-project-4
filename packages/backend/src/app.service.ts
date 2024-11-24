@@ -33,7 +33,7 @@ export class AppService {
     return 'Hello World!';
   }
   getContractAddress(): Address {
-    return '0x42c75444c0b6a9cc21346feba1dd0bfdd009389b';
+    return '0x2971b012FC04c81A11c863d16Ee6a933A870f33E';
   }
   async getTokenName(): Promise<string> {
     const name = await this.publicClient.readContract({
