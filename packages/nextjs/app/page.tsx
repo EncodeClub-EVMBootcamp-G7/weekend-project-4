@@ -151,9 +151,11 @@ const Winner = () => {
 };
 const DelegateComponent = () => {
   const [address, setAddress] = useState<string>(""); // Address to delegate to
-  const [response, setResponse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
+
+  const { writeContractAsync: delegateWriteAsync } = useScaffoldWriteContract("MyToken");
 
   const handleDelegate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,19 +164,12 @@ const DelegateComponent = () => {
     setResponse(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/delegate?address=${address}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      await delegateWriteAsync({
+        functionName: "delegate",
+        args: [address], // Address to delegate to
       });
 
-      if (!res.ok) {
-        throw new Error(`Error: ${res.status} ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      setResponse(data.result);
+      setResponse(`Delegation successful to ${address}`);
     } catch (err: any) {
       setError(err.message || "Failed to delegate voting power");
     } finally {
@@ -205,11 +200,12 @@ const DelegateComponent = () => {
           {isLoading ? "Delegating..." : "Delegate"}
         </button>
       </form>
-      {response && <p className="text-green-600">Delegation Successful: {response}</p>}
-      {error && <p className="text-red-500">Error: {error}</p>}
+      {response && <p className="text-green-600">{response}</p>}
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };
+
 const RemainingVotingPower = () => {
   const { address, isConnected } = useAccount();
 

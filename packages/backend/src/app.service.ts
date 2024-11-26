@@ -124,23 +124,4 @@ export class AppService {
       throw new Error(`Minting failed. Transaction hash: ${txHash}`);
     }
   }
-  async delegate(address: string) {
-    const txHash = await this.walletClient.writeContract({
-      address: this.getContractAddress(),
-      abi: tokenJson.abi,
-      functionName: 'delegate',
-      args: [address],
-    });
-
-    // Wait for the transaction receipt to confirm success
-    const receipt = await this.publicClient.waitForTransactionReceipt({
-      hash: txHash,
-    });
-
-    if (receipt.status === 'success') {
-      return `Delegated successfully. Transaction hash: ${txHash}`;
-    } else {
-      throw new Error(`Delegation failed. Transaction hash: ${txHash}`);
-    }
-  }
 }

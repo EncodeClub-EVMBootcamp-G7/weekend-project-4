@@ -49,16 +49,4 @@ export class AppController {
       result: await this.appService.mintTokens(body.address, body.amount),
     };
   }
-  @Post('delegate')
-  async delegate(@Query('address') address: string) {
-    return {
-      result: await this.appService.delegate(address),
-    };
-  }
-  /*@Post('vote')
-  async vote(@Query('proposal') proposal: number) {
-    return {
-      result: await this.appService.vote(proposal),
-    };
-  }*/
 }
